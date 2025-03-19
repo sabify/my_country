@@ -1,0 +1,1142 @@
+[package]
+name = "my_country"
+description = "Useful information about every country.  ISO 3166 (countries and states/subdivisions ), ISO 4217 (currency) and E.164 (phone numbers)."
+version = "0.1.0"
+authors = ["Saber Haj Rabiee"]
+edition = "2024"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/sabify/my_country"
+documentation = "https://docs.rs/my_country/"
+homepage = "https://github.com/zbrox/my_country"
+readme = "README.md"
+keywords = ["country", "currency", "iso", "4217", "3166", "e.164"]
+
+[dependencies]
+serde = { version = "1.0.219", optional = true, features = ["derive"] }
+strum = { version = "0.27.1", optional = true, features = ["derive"] }
+thiserror = "2.0.12"
+
+[dev-dependencies]
+serde_json = "1.0.140"
+criterion = "0.5.1"
+
+[build-dependencies]
+proc-macro2 = { version = "1.0.94", features = ["span-locations"] }
+quote = "1.0.40"
+serde_yaml = "0.9.34"
+serde = { version = "1.0", features = ["derive"] }
+walkdir = "2.5.0"
+anyhow = "1.0.97"
+csv = "1.3.1"
+prettyplease = "0.2.31"
+syn = "2.0.100"
+colored = "3.0.0"
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
+[package.metadata.cargo-all-features]
+denylist = [""]                    # prohibit empty feature list
+max_combination_size = 2
+skip_optional_dependencies = false
+
+[[bench]]
+name = "main"
+harness = false
+
+[features]
+default = ["alpha2", "alpha3"]
+serde = ["dep:serde"]
+iterator = ["dep:strum"]
+
+# Currency methods
+currency = ["currency_name", "currency_numeric_code", "currency_minor_unit"]
+currency_name = ["currency_code"]
+currency_numeric_code = ["currency_code"]
+currency_minor_unit = ["currency_code"]
+
+# Country methods
+alpha2 = []
+alpha3 = []
+continent = []
+country_code = []
+currency_code = []
+distance_unit = []
+gec = []
+geo = []
+international_prefix = []
+ioc = []
+iso_long_name = []
+iso_short_name = []
+languages_official = []
+languages_spoken = []
+national_destination_code_lengths = []
+national_number_lengths = []
+national_prefix = []
+nationality = []
+numeric_code = []
+postal_code = []
+postal_code_format = []
+region = []
+start_of_week = []
+subregion = []
+un_locode = []
+un_member = []
+unofficial_names = []
+vehicle_registration_code = []
+world_region = []
+address_format = []
+vat_rates = []
+nanp_prefix = []
+g20_member = []
+eea_member = []
+eu_member = []
+euvat_member = []
+g7_member = []
+esm_member = []
+alt_currency = []
+
+# Subdivision fields
+subdivision = [
+  "subdivision_name",
+  "subdivision_code",
+  "subdivision_translations",
+  "subdivision_type",
+  "subdivision_unofficial_names",
+  "subdivision_geo",
+  "subdivision_comments",
+]
+subdivision_name = []
+subdivision_code = []
+subdivision_translations = []
+subdivision_type = []
+subdivision_unofficial_names = []
+subdivision_geo = []
+subdivision_comments = []
+
+# Currencies can be enabled separately from these features or with each country
+currency_code_aud = []
+currency_code_dkk = []
+currency_code_xdr = []
+currency_code_clf = []
+currency_code_lbp = []
+currency_code_mvr = []
+currency_code_mxn = []
+currency_code_pkr = []
+currency_code_uyw = []
+currency_code_bdt = []
+currency_code_bmd = []
+currency_code_djf = []
+currency_code_bwp = []
+currency_code_mur = []
+currency_code_aed = []
+currency_code_zwg = []
+currency_code_ars = []
+currency_code_bam = []
+currency_code_afn = []
+currency_code_mru = []
+currency_code_sle = []
+currency_code_ugx = []
+currency_code_mzn = []
+currency_code_kmf = []
+currency_code_npr = []
+currency_code_nzd = []
+currency_code_nok = []
+currency_code_omr = []
+currency_code_ghs = []
+currency_code_jpy = []
+currency_code_krw = []
+currency_code_mad = []
+currency_code_uzs = []
+currency_code_bzd = []
+currency_code_btn = []
+currency_code_cup = []
+currency_code_szl = []
+currency_code_stn = []
+currency_code_sbd = []
+currency_code_twd = []
+currency_code_dop = []
+currency_code_xsu = []
+currency_code_awg = []
+currency_code_gyd = []
+currency_code_idr = []
+currency_code_rsd = []
+currency_code_ttd = []
+currency_code_tzs = []
+currency_code_xpd = []
+currency_code_bif = []
+currency_code_dzd = []
+currency_code_amd = []
+currency_code_chf = []
+currency_code_kyd = []
+currency_code_fjd = []
+currency_code_xpf = []
+currency_code_xxx = []
+currency_code_pln = []
+currency_code_ils = []
+currency_code_fkp = []
+currency_code_mnt = []
+currency_code_jmd = []
+currency_code_all = []
+currency_code_cad = []
+currency_code_crc = []
+currency_code_mop = []
+currency_code_mkd = []
+currency_code_egp = []
+currency_code_try = []
+currency_code_xbc = []
+currency_code_xag = []
+currency_code_cny = []
+currency_code_xbd = []
+currency_code_php = []
+currency_code_bnd = []
+currency_code_azn = []
+currency_code_top = []
+currency_code_iqd = []
+currency_code_gbp = []
+currency_code_rwf = []
+currency_code_ssp = []
+currency_code_kwd = []
+currency_code_syp = []
+currency_code_ved = []
+currency_code_vnd = []
+currency_code_zmw = []
+currency_code_ang = []
+currency_code_shp = []
+currency_code_xts = []
+currency_code_xau = []
+currency_code_xpt = []
+currency_code_uah = []
+currency_code_gip = []
+currency_code_etb = []
+currency_code_usn = []
+currency_code_chw = []
+currency_code_bsd = []
+currency_code_eur = []
+currency_code_hkd = []
+currency_code_mmk = []
+currency_code_lrd = []
+currency_code_mga = []
+currency_code_zar = []
+currency_code_sgd = []
+currency_code_mxv = []
+currency_code_xbb = []
+currency_code_uyi = []
+currency_code_ngn = []
+currency_code_srd = []
+currency_code_xua = []
+currency_code_che = []
+currency_code_bgn = []
+currency_code_kes = []
+currency_code_lsl = []
+currency_code_clp = []
+currency_code_sos = []
+currency_code_tjs = []
+currency_code_thb = []
+currency_code_kgs = []
+currency_code_czk = []
+currency_code_bbd = []
+currency_code_wst = []
+currency_code_byn = []
+currency_code_xof = []
+currency_code_xaf = []
+currency_code_gnf = []
+currency_code_cop = []
+currency_code_htg = []
+currency_code_mdl = []
+currency_code_svc = []
+currency_code_nad = []
+currency_code_rub = []
+currency_code_vuv = []
+currency_code_yer = []
+currency_code_myr = []
+currency_code_aoa = []
+currency_code_lkr = []
+currency_code_gtq = []
+currency_code_sdg = []
+currency_code_bhd = []
+currency_code_isk = []
+currency_code_pab = []
+currency_code_irr = []
+currency_code_lyd = []
+currency_code_bov = []
+currency_code_pen = []
+currency_code_usd = []
+currency_code_nio = []
+currency_code_brl = []
+currency_code_cve = []
+currency_code_gmd = []
+currency_code_kpw = []
+currency_code_bob = []
+currency_code_scr = []
+currency_code_pyg = []
+currency_code_sek = []
+currency_code_tnd = []
+currency_code_ern = []
+currency_code_qar = []
+currency_code_ves = []
+currency_code_pgk = []
+currency_code_uyu = []
+currency_code_xba = []
+currency_code_cou = []
+currency_code_cdf = []
+currency_code_gel = []
+currency_code_hnl = []
+currency_code_lak = []
+currency_code_tmt = []
+currency_code_xcd = []
+currency_code_khr = []
+currency_code_ron = []
+currency_code_inr = []
+currency_code_mwk = []
+currency_code_kzt = []
+currency_code_jod = []
+currency_code_sar = []
+currency_code_huf = []
+
+
+# Enable all Locales
+# Do not enable this unless you needed.
+# A huge amout of code will be generated for all these features
+translation = [
+  "locale_af",
+  "locale_am",
+  "locale_ar",
+  "locale_az",
+  "locale_be",
+  "locale_bg",
+  "locale_bn",
+  "locale_ca",
+  "locale_cs",
+  "locale_da",
+  "locale_de",
+  "locale_el",
+  "locale_en",
+  "locale_es",
+  "locale_et",
+  "locale_eu",
+  "locale_fa",
+  "locale_fi",
+  "locale_fr",
+  "locale_gl",
+  "locale_gu",
+  "locale_he",
+  "locale_hi",
+  "locale_hr",
+  "locale_hu",
+  "locale_hy",
+  "locale_id",
+  "locale_is",
+  "locale_it",
+  "locale_ja",
+  "locale_ka",
+  "locale_kn",
+  "locale_ko",
+  "locale_lt",
+  "locale_lv",
+  "locale_ml",
+  "locale_mn",
+  "locale_mr",
+  "locale_ms",
+  "locale_nb",
+  "locale_nl",
+  "locale_pl",
+  "locale_ps",
+  "locale_pt",
+  "locale_ro",
+  "locale_ru",
+  "locale_si",
+  "locale_sk",
+  "locale_sl",
+  "locale_sr",
+  "locale_sv",
+  "locale_sw",
+  "locale_ta",
+  "locale_te",
+  "locale_th",
+  "locale_tk",
+  "locale_tr",
+  "locale_uk",
+  "locale_ur",
+  "locale_vi",
+  "locale_zh",
+  "locale_cy",
+  "locale_ceb",
+  "locale_sr_latn",
+  "locale_yue_hans",
+  "locale_jv",
+  "locale_sq",
+  "locale_ccp",
+  "locale_ga",
+  "locale_ky",
+  "locale_pa",
+  "locale_kk",
+  "locale_yue",
+  "locale_yo",
+  "locale_uz",
+  "locale_bs",
+  "locale_mk",
+  "locale_ne",
+  "locale_no",
+  "locale_yo_bj",
+  "locale_my",
+  "locale_sd",
+  "locale_ha",
+  "locale_ha_ne",
+  "locale_or",
+  "locale_tm",
+  "locale_so",
+  "locale_km",
+  "locale_zu",
+  "locale_as",
+  "locale_lo",
+  "locale_ig",
+  "locale_tl",
+  "locale_la",
+  "locale_fil",
+  "locale_zh_hant",
+  "locale_sc",
+  "locale_dv",
+  "locale_os",
+  "locale_oc",
+  "locale_br",
+  "locale_lb",
+  "locale_ast",
+  "locale_be_tarask",
+  "locale_nn",
+  "locale_sgs",
+  "locale_aa",
+  "locale_ak",
+  "locale_aln",
+  "locale_an",
+  "locale_ang",
+  "locale_arn",
+  "locale_ay",
+  "locale_bar",
+  "locale_bcl",
+  "locale_bi",
+  "locale_bjn",
+  "locale_bm",
+  "locale_brh",
+  "locale_cbk_zam",
+  "locale_cdo",
+  "locale_ch",
+  "locale_cho",
+  "locale_chr",
+  "locale_chy",
+  "locale_co",
+  "locale_cr",
+  "locale_crh_latn",
+  "locale_csb",
+  "locale_de_at",
+  "locale_de_ch",
+  "locale_diq",
+  "locale_dsb",
+  "locale_dtp",
+  "locale_ee",
+  "locale_eml",
+  "locale_en_ca",
+  "locale_en_gb",
+  "locale_eo",
+  "locale_ext",
+  "locale_ff",
+  "locale_fit",
+  "locale_fj",
+  "locale_fo",
+  "locale_frp",
+  "locale_frr",
+  "locale_fur",
+  "locale_fy",
+  "locale_gag",
+  "locale_gd",
+  "locale_gn",
+  "locale_got",
+  "locale_gsw",
+  "locale_hak",
+  "locale_haw",
+  "locale_hif_latn",
+  "locale_ho",
+  "locale_hsb",
+  "locale_ht",
+  "locale_hz",
+  "locale_ia",
+  "locale_ie",
+  "locale_ik",
+  "locale_ike_latn",
+  "locale_ilo",
+  "locale_io",
+  "locale_iu",
+  "locale_jam",
+  "locale_jbo",
+  "locale_kaa",
+  "locale_kab",
+  "locale_kg",
+  "locale_ki",
+  "locale_kj",
+  "locale_kk_latn",
+  "locale_kk_tr",
+  "locale_kl",
+  "locale_kr",
+  "locale_krj",
+  "locale_ksh",
+  "locale_ku",
+  "locale_lad",
+  "locale_lfn",
+  "locale_li",
+  "locale_lij",
+  "locale_lmo",
+  "locale_ln",
+  "locale_loz",
+  "locale_ltg",
+  "locale_lus",
+  "locale_lzz",
+  "locale_map_bms",
+  "locale_mi",
+  "locale_min",
+  "locale_mt",
+  "locale_mus",
+  "locale_mwl",
+  "locale_na",
+  "locale_nah",
+  "locale_nap",
+  "locale_nds",
+  "locale_nds_nl",
+  "locale_ng",
+  "locale_nov",
+  "locale_nrm",
+  "locale_nso",
+  "locale_nv",
+  "locale_ny",
+  "locale_om",
+  "locale_pag",
+  "locale_pam",
+  "locale_pcd",
+  "locale_pdc",
+  "locale_pdt",
+  "locale_pfl",
+  "locale_pih",
+  "locale_pms",
+  "locale_prg",
+  "locale_pt_br",
+  "locale_qu",
+  "locale_qug",
+  "locale_rif",
+  "locale_rm",
+  "locale_rmy",
+  "locale_rn",
+  "locale_roa_tara",
+  "locale_rup",
+  "locale_ruq_latn",
+  "locale_rw",
+  "locale_sat",
+  "locale_scn",
+  "locale_sco",
+  "locale_sdc",
+  "locale_se",
+  "locale_sei",
+  "locale_sg",
+  "locale_sh",
+  "locale_shi_latn",
+  "locale_sli",
+  "locale_sm",
+  "locale_sma",
+  "locale_sn",
+  "locale_sr_el",
+  "locale_srn",
+  "locale_st",
+  "locale_stq",
+  "locale_szl",
+  "locale_tet",
+  "locale_tg_latn",
+  "locale_tn",
+  "locale_to",
+  "locale_tpi",
+  "locale_tru",
+  "locale_ts",
+  "locale_tt_latn",
+  "locale_tum",
+  "locale_ty",
+  "locale_ug_latn",
+  "locale_ve",
+  "locale_vec",
+  "locale_vep",
+  "locale_vls",
+  "locale_vmf",
+  "locale_vo",
+  "locale_vot",
+  "locale_wa",
+  "locale_war",
+  "locale_wo",
+  "locale_xh",
+  "locale_za",
+  "locale_zea",
+  "locale_pnb",
+  "locale_azb",
+  "locale_tt",
+  "locale_zh_cn",
+  "locale_zh_hans",
+  "locale_zh_hk",
+  "locale_zh_sg",
+  "locale_zh_tw",
+  "locale_fkv",
+
+  "locale_bn_in",
+  "locale_kw",
+  "locale_pi",
+  "locale_ba",
+  "locale_ti",
+  "locale_ce",
+  "locale_dz",
+  "locale_tg",
+  "locale_cv",
+  "locale_ab",
+  "locale_ug",
+  "locale_gv",
+]
+
+# Locale features
+locale_af = []
+locale_am = []
+locale_ar = []
+locale_az = []
+locale_be = []
+locale_bg = []
+locale_bn = []
+locale_ca = []
+locale_cs = []
+locale_da = []
+locale_de = []
+locale_el = []
+locale_en = []
+locale_es = []
+locale_et = []
+locale_eu = []
+locale_fa = []
+locale_fi = []
+locale_fr = []
+locale_gl = []
+locale_gu = []
+locale_he = []
+locale_hi = []
+locale_hr = []
+locale_hu = []
+locale_hy = []
+locale_id = []
+locale_is = []
+locale_it = []
+locale_ja = []
+locale_ka = []
+locale_kn = []
+locale_ko = []
+locale_lt = []
+locale_lv = []
+locale_ml = []
+locale_mn = []
+locale_mr = []
+locale_ms = []
+locale_nb = []
+locale_nl = []
+locale_pl = []
+locale_ps = []
+locale_pt = []
+locale_ro = []
+locale_ru = []
+locale_si = []
+locale_sk = []
+locale_sl = []
+locale_sr = []
+locale_sv = []
+locale_sw = []
+locale_ta = []
+locale_te = []
+locale_th = []
+locale_tk = []
+locale_tr = []
+locale_uk = []
+locale_ur = []
+locale_vi = []
+locale_zh = []
+locale_cy = []
+locale_ceb = []
+locale_sr_latn = []
+locale_yue_hans = []
+locale_jv = []
+locale_sq = []
+locale_ccp = []
+locale_ga = []
+locale_ky = []
+locale_pa = []
+locale_kk = []
+locale_yue = []
+locale_yo = []
+locale_uz = []
+locale_bs = []
+locale_mk = []
+locale_ne = []
+locale_no = []
+locale_yo_bj = []
+locale_my = []
+locale_sd = []
+locale_ha = []
+locale_ha_ne = []
+locale_or = []
+locale_tm = []
+locale_so = []
+locale_km = []
+locale_zu = []
+locale_as = []
+locale_lo = []
+locale_ig = []
+locale_tl = []
+locale_de_ch = []
+locale_la = []
+locale_fil = []
+locale_sc = []
+locale_dv = []
+locale_os = []
+locale_oc = []
+locale_br = []
+locale_lb = []
+locale_ast = []
+locale_be_tarask = []
+locale_nn = []
+locale_sgs = []
+locale_aa = []
+locale_ak = []
+locale_aln = []
+locale_an = []
+locale_ang = []
+locale_arn = []
+locale_ay = []
+locale_bar = []
+locale_bcl = []
+locale_bi = []
+locale_bjn = []
+locale_bm = []
+locale_brh = []
+locale_cbk_zam = []
+locale_cdo = []
+locale_ch = []
+locale_cho = []
+locale_chr = []
+locale_chy = []
+locale_co = []
+locale_cr = []
+locale_crh_latn = []
+locale_csb = []
+locale_de_at = []
+locale_diq = []
+locale_dsb = []
+locale_dtp = []
+locale_ee = []
+locale_eml = []
+locale_en_ca = []
+locale_en_gb = []
+locale_eo = []
+locale_ext = []
+locale_ff = []
+locale_fit = []
+locale_fj = []
+locale_fo = []
+locale_frp = []
+locale_frr = []
+locale_fur = []
+locale_fy = []
+locale_gag = []
+locale_gd = []
+locale_gn = []
+locale_got = []
+locale_gsw = []
+locale_hak = []
+locale_haw = []
+locale_hif_latn = []
+locale_ho = []
+locale_hsb = []
+locale_ht = []
+locale_hz = []
+locale_ia = []
+locale_ie = []
+locale_ik = []
+locale_ike_latn = []
+locale_ilo = []
+locale_io = []
+locale_iu = []
+locale_jam = []
+locale_jbo = []
+locale_kaa = []
+locale_kab = []
+locale_kg = []
+locale_ki = []
+locale_kj = []
+locale_kk_latn = []
+locale_kk_tr = []
+locale_kl = []
+locale_kr = []
+locale_krj = []
+locale_ksh = []
+locale_ku = []
+locale_lad = []
+locale_lfn = []
+locale_li = []
+locale_lij = []
+locale_lmo = []
+locale_ln = []
+locale_loz = []
+locale_ltg = []
+locale_lus = []
+locale_lzz = []
+locale_map_bms = []
+locale_mi = []
+locale_min = []
+locale_mt = []
+locale_mus = []
+locale_mwl = []
+locale_na = []
+locale_nah = []
+locale_nap = []
+locale_nds = []
+locale_nds_nl = []
+locale_ng = []
+locale_nov = []
+locale_nrm = []
+locale_nso = []
+locale_nv = []
+locale_ny = []
+locale_om = []
+locale_pag = []
+locale_pam = []
+locale_pcd = []
+locale_pdc = []
+locale_pdt = []
+locale_pfl = []
+locale_pih = []
+locale_pms = []
+locale_prg = []
+locale_pt_br = []
+locale_qu = []
+locale_qug = []
+locale_rif = []
+locale_rm = []
+locale_rmy = []
+locale_rn = []
+locale_roa_tara = []
+locale_rup = []
+locale_ruq_latn = []
+locale_rw = []
+locale_sat = []
+locale_scn = []
+locale_sco = []
+locale_sdc = []
+locale_se = []
+locale_sei = []
+locale_sg = []
+locale_sh = []
+locale_shi_latn = []
+locale_sli = []
+locale_sm = []
+locale_sma = []
+locale_sn = []
+locale_sr_el = []
+locale_srn = []
+locale_st = []
+locale_stq = []
+locale_szl = []
+locale_tet = []
+locale_tg_latn = []
+locale_tn = []
+locale_to = []
+locale_tpi = []
+locale_tru = []
+locale_ts = []
+locale_tt_latn = []
+locale_tum = []
+locale_ty = []
+locale_ug_latn = []
+locale_ve = []
+locale_vec = []
+locale_vep = []
+locale_vls = []
+locale_vmf = []
+locale_vo = []
+locale_vot = []
+locale_wa = []
+locale_war = []
+locale_wo = []
+locale_xh = []
+locale_za = []
+locale_zea = []
+locale_pnb = []
+locale_azb = []
+locale_tt = []
+locale_zh_cn = []
+locale_zh_hans = []
+locale_zh_hant = []
+locale_zh_hk = []
+locale_zh_sg = []
+locale_zh_tw = []
+locale_fkv = []
+
+locale_bn_in = []
+locale_kw = []
+locale_pi = []
+locale_ba = []
+locale_ti = []
+locale_ce = []
+locale_dz = []
+locale_tg = []
+locale_cv = []
+locale_ab = []
+locale_ug = []
+locale_gv = []
+
+# Country alpha2 codes
+cf = []
+tc = []
+hr = []
+mk = []
+ag = []
+fo = []
+gs = []
+il = []
+dj = []
+vn = []
+tn = []
+es = []
+fm = []
+mt = []
+fj = []
+do = []
+my = []
+fk = []
+cn = []
+bq = []
+it = []
+mn = []
+la = []
+mw = []
+et = []
+mc = []
+si = []
+np = []
+vi = []
+me = []
+gg = []
+pk = []
+tl = []
+ls = []
+au = []
+bl = []
+pg = []
+va = []
+ke = []
+sy = []
+se = []
+mv = []
+ng = []
+mm = []
+tm = []
+bv = []
+lb = []
+bm = []
+je = []
+ai = []
+mf = []
+pm = []
+pw = []
+aw = []
+pe = []
+sg = []
+tr = []
+jm = []
+ir = []
+nz = []
+no = []
+st = []
+tw = []
+pf = []
+dm = []
+py = []
+ao = []
+pl = []
+lu = []
+za = []
+zw = []
+gf = []
+gq = []
+mq = []
+lc = []
+jo = []
+ps = []
+lt = []
+cg = []
+pr = []
+bd = []
+ck = []
+gb = []
+sc = []
+uz = []
+ga = []
+hk = []
+nr = []
+ve = []
+ec = []
+fi = []
+cw = []
+gl = []
+sh = []
+kh = []
+gt = []
+gd = []
+zm = []
+nc = []
+mg = []
+as = []
+nl = []
+ws = []
+km = []
+mh = []
+bg = []
+sm = []
+tv = []
+ph = []
+de = []
+md = []
+rs = []
+ug = []
+ua = []
+af = []
+co = []
+kp = []
+eg = []
+to = []
+wf = []
+ru = []
+gp = []
+ca = []
+sv = []
+cl = []
+ar = []
+cu = []
+cd = []
+tg = []
+dz = []
+tt = []
+tk = []
+th = []
+bf = []
+bo = []
+ci = []
+ge = []
+mo = []
+bb = []
+mr = []
+ye = []
+kn = []
+vg = []
+eh = []
+by = []
+ht = []
+im = []
+ly = []
+ad = []
+ki = []
+ro = []
+sa = []
+lr = []
+gi = []
+ba = []
+gn = []
+qa = []
+yt = []
+us = []
+ni = []
+ne = []
+sd = []
+gw = []
+bz = []
+gu = []
+tf = []
+ae = []
+az = []
+at = []
+vu = []
+ms = []
+kw = []
+hu = []
+sj = []
+sz = []
+ss = []
+ee = []
+cr = []
+gy = []
+gm = []
+am = []
+cz = []
+tz = []
+mx = []
+br = []
+cx = []
+iq = []
+na = []
+hm = []
+lv = []
+pn = []
+sl = []
+bn = []
+bw = []
+sn = []
+sb = []
+pt = []
+sx = []
+sk = []
+in = []
+bs = []
+om = []
+vc = []
+fr = []
+al = []
+uy = []
+cc = []
+mp = []
+ch = []
+li = []
+rw = []
+id = []
+dk = []
+kz = []
+kg = []
+bj = []
+ma = []
+nu = []
+tj = []
+nf = []
+lk = []
+jp = []
+gr = []
+ky = []
+kr = []
+cv = []
+io = []
+so = []
+hn = []
+is = []
+ml = []
+cm = []
+um = []
+mu = []
+re = []
+aq = []
+pa = []
+bi = []
+mz = []
+er = []
+td = []
+be = []
+ax = []
+bh = []
+gh = []
+bt = []
+cy = []
+ie = []
+sr = []
