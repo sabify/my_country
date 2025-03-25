@@ -5,7 +5,7 @@ on:
     - cron: '0 0 * * *'
   workflow_dispatch:
 jobs:
-  update-csv:
+  update-currencies:
     runs-on: ubuntu-latest
     env:
       CURRENCIES_PATH: "data/currencies.csv"
@@ -58,22 +58,19 @@ jobs:
           git submodule init
 
           BEFORE_UPDATE=$(git submodule status)
+          BEFORE_HASH=$(echo "$BEFORE_UPDATE" | grep "$COUNTRIES_PATH" | awk '{ print $1 }' | sed 's/^[-+]//g')
 
           git submodule update --recursive
 
           AFTER_UPDATE=$(git submodule status)
+          AFTER_HASH=$(echo "$AFTER_UPDATE" | grep "$COUNTRIES_PATH" | awk '{ print $1 }' | sed 's/^[-+]//g')
 
-          if [ "$BEFORE_UPDATE" != "$AFTER_UPDATE" ]; then
-            BEFORE_HASH=$(echo "$BEFORE_UPDATE" | grep "$COUNTRIES_PATH" | awk '{ print $1 }' | sed 's/^[-+]//g')
-            AFTER_HASH=$(echo "$AFTER_UPDATE" | grep "$COUNTRIES_PATH" | awk '{ print $1 }' | sed 's/^[-+]//g')
+          cd "$COUNTRIES_PATH"
+          CHANGED_FILES=$(git diff --name-only "$BEFORE_HASH" "$AFTER_HASH" -- "$COUNTRIES_DATA_PATH")
 
-            cd "$COUNTRIES_PATH"
-            CHANGED_FILES=$(git diff --name-only "$BEFORE_HASH" "$AFTER_HASH" -- "$COUNTRIES_DATA_PATH")
-
-            if [ -n "$CHANGED_FILES" ]; then
-              echo "changes=true" >> $GITHUB_OUTPUT
-              echo "changed_files='$CHANGED_FILES" >> $GITHUB_OUTPUT
-            fi
+          if [ -n "$CHANGED_FILES" ]; then
+            echo "changes=true" >> $GITHUB_OUTPUT
+            echo "changed_files='$CHANGED_FILES" >> $GITHUB_OUTPUT
           fi
       - name: Create Pull Request
         if: steps.git-check.outputs.changes == 'true'
