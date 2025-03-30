@@ -60,7 +60,7 @@ jobs:
           BEFORE_UPDATE=$(git submodule status)
           BEFORE_HASH=$(echo "$BEFORE_UPDATE" | grep "$COUNTRIES_PATH" | awk '{ print $1 }' | sed 's/^[-+]//g')
 
-          git submodule update --recursive
+          git submodule update --remote --merge --recursive
 
           AFTER_UPDATE=$(git submodule status)
           AFTER_HASH=$(echo "$AFTER_UPDATE" | grep "$COUNTRIES_PATH" | awk '{ print $1 }' | sed 's/^[-+]//g')
