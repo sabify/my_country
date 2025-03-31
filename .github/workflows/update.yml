@@ -4,6 +4,9 @@ on:
     # Run daily at midnight UTC
     - cron: '0 0 * * *'
   workflow_dispatch:
+permissions:
+  contents: read
+  pull-requests: read
 jobs:
   update-currencies:
     runs-on: ubuntu-latest
