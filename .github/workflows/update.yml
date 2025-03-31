@@ -78,7 +78,6 @@ jobs:
         if: steps.git-check.outputs.changes == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "chore: update countries submodule [automated]"
           title: "Update countries submodule"
           body: |
