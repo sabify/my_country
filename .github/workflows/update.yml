@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
-  pull-requests: read
+  pull-requests: write
 jobs:
   update-currencies:
     runs-on: ubuntu-latest
@@ -49,10 +49,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Configure Git
-        run: |
-          git config --global user.name 'GitHub Actions Bot'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
       - name: Check new changes in data path
         id: git-check
         run: |
