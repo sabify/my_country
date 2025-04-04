@@ -193,6 +193,9 @@ if country.postal_code() {
     println!("Postal code format: {:?}", country.postal_code_format());
 }
 
+// Get emoji flag, 🇺🇸
+println!("Flag: {}", country.emoji_flag());
+
 // Code generation with feature flags
 // my_country = { version = "0.1.0", default-features = false, features = ["us", "alpha2", "alpha3", "numeric_code", "iso_short_name", "iso_long_name", "continent", "region", "subregion", "geo", "country_code", "international_prefix", "postal_code_format"] }
 ```

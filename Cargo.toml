@@ -95,6 +95,7 @@ euvat_member = []
 g7_member = []
 esm_member = []
 alt_currency = []
+emoji_flag = []
 
 # Subdivision fields
 subdivision = [

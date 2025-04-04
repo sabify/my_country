@@ -63,6 +63,7 @@ struct Country {
     euvat_member: Option<bool>,
     esm_member: Option<bool>,
     g7_member: Option<bool>,
+    emoji_flag: Option<String>,
 }
 
 #[derive(Clone, Deserialize)]
@@ -352,6 +353,20 @@ macro_rules! generate_method {
             {
                 let iter_fn = |country: &Country| {
                     let item = country.$name.clone();
+                        quote!{
+                            #item
+                        }
+                };
+                let all: TokenStream = generate_method!(@iter $countries, $name, iter_fn);
+                generate_method!(@ret $ret, $name, $doc, all)
+            }
+        )
+    }};
+    (trusted $name:tt, $doc:literal, Option<$ret:ty>, $features:ident, $countries:ident) => {{
+        generate_method!(@if_true $features, $name,
+            {
+                let iter_fn = |country: &Country| {
+                    let item = country.$name.clone().unwrap();
                         quote!{
                             #item
                         }
@@ -1664,6 +1679,13 @@ fn generate(
         features,
         countries
     );
+    let emoji_flag = generate_method!(trusted
+        emoji_flag,
+        "Whether the country is a G7 member",
+        Option<&'static str>,
+        features,
+        countries
+    );
 
     let subdivision = generate_method_subdivision(
         &features,
@@ -1754,6 +1776,7 @@ fn generate(
         #euvat_member
         #esm_member
         #g7_member
+        #emoji_flag
         #subdivision
         #translations
 
@@ -1795,6 +1818,13 @@ fn main() {
     let mut countries: Countries = load_yaml_files(data_path_buf.join("countries"), false).unwrap();
 
     countries.retain(|c, _| features.contains(c));
+
+    // extending the countries data
+    for (_, c) in countries.iter_mut() {
+        for (_, c) in c.iter_mut() {
+            c.emoji_flag = Some(country_code_to_emoji_flag(&c.alpha2));
+        }
+    }
 
     let mut subdivisions: Subdivisions =
         load_yaml_files(data_path_buf.join("subdivisions"), false).unwrap();
@@ -1944,4 +1974,19 @@ fn render_location(err: &syn::Error, code: &str) {
 }
 fn render_fallback(err: &syn::Error) {
     panic!("Unable to parse file: {}", err);
+}
+
+fn country_code_to_emoji_flag(alpha2: &str) -> String {
+    // Unicode flags work by combining regional indicator symbols
+    // Each regional indicator symbol is 127397 (0x1F1E6) more than the ASCII code for 'A'
+    alpha2
+        .to_uppercase() // Convert to uppercase for consistency
+        .chars()
+        .map(|c| {
+            // Convert each letter to the corresponding regional indicator symbol
+            let scalar = (c as u32) + 127397;
+            // Create a char from the scalar value
+            char::from_u32(scalar).unwrap()
+        })
+        .collect()
 }

@@ -105,6 +105,12 @@ mod iso_code_tests {
     fn test_vehicle_registration_code() {
         assert_eq!(Country::US.vehicle_registration_code(), Some("USA"));
     }
+
+    #[test]
+    #[cfg(feature = "emoji_flag")]
+    fn test_emoji_flag() {
+        assert_eq!(Country::US.emoji_flag(), "🇺🇸");
+    }
 }
 
 // 3. Country Name and Description Tests
