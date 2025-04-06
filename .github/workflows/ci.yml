@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - master
+      - update-csv-data
+      - update-countries-submodule
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
