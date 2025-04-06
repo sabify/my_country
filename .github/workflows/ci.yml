@@ -1,6 +1,10 @@
 name: Rust CI
 on:
   pull_request:
+    branches:
+      - master
+      - update-csv-data
+      - update-countries-submodule
   push:
     branches:
       - master
@@ -30,7 +34,7 @@ jobs:
       - name: Cache dependencies
         uses: Swatinem/rust-cache@v2
       - name: Install cargo-all-features
-        run: cargo install --git https://github.com/sabify/cargo-all-features
+        run: cargo install --git https://github.com/sabify/cargo-all-features --branch arbitrary-command-support
       - name: Clippy with all feature combinations
         run: cargo all-features clippy -- -D warnings
       - name: Test with all feature combinations (without docs)
