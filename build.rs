@@ -113,7 +113,7 @@ struct Subdivision {
 #[derive(Debug, Deserialize)]
 struct Currency {
     #[serde(rename = "Entity")]
-    _entity: String,
+    entity: String,
     #[serde(rename = "Currency")]
     name: String,
     #[serde(rename = "AlphabeticCode")]
@@ -1861,21 +1861,11 @@ fn main() {
             acc
         });
 
-    let mut available_currencies: HashSet<String> = countries
-        .values()
-        .map(|countries| {
-            countries
-                .iter()
-                .map(|(_, country)| country.currency_code.clone())
-                .collect()
-        })
-        .collect::<HashSet<String>>();
-    available_currencies.extend(
-        features
-            .iter()
-            .filter_map(|f| f.strip_prefix("currency_code_"))
-            .map(|f| f.to_uppercase()),
-    );
+    let mut available_currencies: HashSet<String> = features
+        .iter()
+        .filter_map(|f| f.strip_prefix("currency_code_"))
+        .map(|f| f.to_uppercase())
+        .collect();
 
     let currencies: Currencies = if features
         .iter()
@@ -1893,9 +1883,21 @@ fn main() {
                 if c.withdrawal_date.is_none()
                     && !c.alphabetic_code.is_empty()
                     && c.numeric_code != 0
-                    && available_currencies.contains(&c.alphabetic_code)
                 {
-                    return Some((c.alphabetic_code.clone(), c));
+                    // extending the countries data
+                    'outer: for (_, cy) in countries.iter_mut() {
+                        for (_, cy) in cy.iter_mut() {
+                            if cy.iso_short_name.to_uppercase() == c.entity {
+                                cy.currency_code = c.alphabetic_code.clone();
+                                available_currencies.insert(c.alphabetic_code.clone());
+                                break 'outer;
+                            }
+                        }
+                    }
+
+                    if available_currencies.contains(&c.alphabetic_code) {
+                        return Some((c.alphabetic_code.clone(), c));
+                    }
                 }
                 None
             })
@@ -1927,8 +1929,11 @@ fn main() {
     // for line in content.lines() {
     //     println!("cargo:warning={}", line);
     // }
-    let mut file = BufWriter::new(File::create(out_path).expect("Couldn't write to output file"));
-    write!(file, "{}", content).unwrap();
+    let mut file = BufWriter::with_capacity(
+        1024 * 1024,
+        File::create(out_path).expect("Couldn't create the output file"),
+    );
+    write!(file, "{}", content).expect("Couldn't write to output file");
 }
 
 fn render_location(err: &syn::Error, code: &str) {
