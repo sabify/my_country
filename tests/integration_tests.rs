@@ -459,6 +459,7 @@ mod subdivision_tests {
     #[cfg(any(
         feature = "subdivision_name",
         feature = "subdivision_code",
+        feature = "subdivision_type",
         feature = "subdivision_translations",
         feature = "subdivision_unofficial_names",
         feature = "subdivision_geo",
@@ -480,6 +481,15 @@ mod subdivision_tests {
         // This is more of an integration test that would depend on the actual implementation
         let vermont_subdivision = get_ca_subdivision();
         assert_eq!(vermont_subdivision.name, "California");
+    }
+
+    #[cfg(feature = "subdivision_type")]
+    #[test]
+    fn test_subdivision_type() {
+        // Access US subdivisions (assuming US_SUBDIVISIONS is accessible)
+        // This is more of an integration test that would depend on the actual implementation
+        let vermont_subdivision = get_ca_subdivision();
+        assert!(matches!(vermont_subdivision.r#type, SubdivisionType::State));
     }
 
     #[cfg(feature = "subdivision_code")]

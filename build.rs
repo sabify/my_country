@@ -1,4 +1,5 @@
 use anyhow::{Context, Result};
+use heck::ToUpperCamelCase;
 use proc_macro2::{Ident, Span, TokenStream};
 use quote::{ToTokens, quote};
 use serde::{Deserialize, Deserializer, de::DeserializeOwned};
@@ -466,7 +467,13 @@ macro_rules! field_tokens {
         }
     }};
     ($features:ident, $item:ident, $name:tt, $func:ident) => {{
-        if $features.contains(&format!("{}_{}", stringify!($item), stringify!($name))) {
+        let cleaned_name = if stringify!($name).starts_with("r#") {
+            &stringify!($name)[2..]
+        } else {
+            stringify!($name)
+        };
+
+        if $features.contains(&format!("{}_{}", stringify!($item), cleaned_name)) {
             let $name = $func($features, &$item.$name);
             quote! { $name: #$name, }
         } else {
@@ -474,7 +481,13 @@ macro_rules! field_tokens {
         }
     }};
     ($features:ident, $item:ident, $name:tt) => {{
-        if $features.contains(&format!("{}_{}", stringify!($item), stringify!($name))) {
+        let cleaned_name = if stringify!($name).starts_with("r#") {
+            &stringify!($name)[2..]
+        } else {
+            stringify!($name)
+        };
+
+        if $features.contains(&format!("{}_{}", stringify!($item), cleaned_name)) {
             let $name = &$item.$name;
             quote! { $name: #$name, }
         } else {
@@ -1027,6 +1040,50 @@ fn get_subdivision_translation_tokens(
     }
 }
 
+fn generate_subdivision_type(
+    features: &Features,
+    subdivisions: &Subdivisions,
+    doc: &'static str,
+) -> TokenStream {
+    if features
+        .iter()
+        .filter(|f| f.contains("subdivision_type"))
+        .count()
+        == 0
+    {
+        return quote! {};
+    }
+    let types: Vec<_> = subdivisions
+        .iter()
+        .flat_map(|(_, s)| {
+            s.iter()
+                .map(|(_, s)| s.r#type.clone())
+                .collect::<HashSet<_>>()
+        })
+        .collect::<HashSet<_>>()
+        .iter()
+        .map(|t| {
+            let t = make_safe_ident(t.to_upper_camel_case());
+            quote! { #t }
+        })
+        .collect();
+
+    quote! {
+        #[doc = #doc]
+        #[derive(PartialEq, PartialOrd, Debug, Clone)]
+        pub enum SubdivisionType {
+            #(#types),*
+        }
+    }
+}
+
+fn get_subdivision_type_tokens(_features: &Features, t: &str) -> TokenStream {
+    let t = make_safe_ident(t.to_upper_camel_case());
+    quote! {
+        SubdivisionType::#t
+    }
+}
+
 fn generate_method_subdivision(
     features: &Features,
     subdivisions: &Subdivisions,
@@ -1057,7 +1114,8 @@ fn generate_method_subdivision(
                         translations,
                         get_subdivision_translation_tokens
                     );
-                    let country_type = field_tokens!(features, subdivision, r#type);
+                    let subdivision_type =
+                        field_tokens!(features, subdivision, r#type, get_subdivision_type_tokens);
 
                     let unofficial_names =
                         field_tokens!(features, subdivision, Option<Vec<unofficial_names>>);
@@ -1071,7 +1129,7 @@ fn generate_method_subdivision(
                             #name
                             #code
                             #translations
-                            #country_type
+                            #subdivision_type
                             #unofficial_names
                             #geo
                             #comments
@@ -1226,7 +1284,7 @@ fn generate_subdivision(features: &Features) -> TokenStream {
             pub translations: Translation,
 
             /// The type of subdivision (e.g., "state", "province", "territory", "prefecture").
-            pub r#type: &'static str,
+            pub r#type: SubdivisionType,
 
             /// Alternative or colloquial names for the subdivision.
             ///
@@ -1247,7 +1305,13 @@ fn generate_subdivision(features: &Features) -> TokenStream {
     };
 
     filter_struct_fields(input, |field| {
-        features.contains(&format!("subdivision_{}", field.ident.clone().unwrap()))
+        let ident = field.ident.clone().unwrap().to_string();
+        let cleaned_ident = if ident.starts_with("r#") {
+            &ident[2..]
+        } else {
+            &ident
+        };
+        features.contains(&format!("subdivision_{}", cleaned_ident))
     })
 }
 
@@ -1680,6 +1744,8 @@ fn generate(
         &subdivisions,
         "Returns the subdivision (state/province/region) with the specified code for this country.",
     );
+    let subdivision_type = generate_subdivision_type(&features, &subdivisions, "Subdivision types");
+
     let translations = generate_method_translation(
         &features,
         &country_translations,
@@ -1766,6 +1832,7 @@ fn generate(
         #g7_member
         #emoji_flag
         #subdivision
+        #subdivision_type
         #translations
 
         #impl_from_str_alpha3
