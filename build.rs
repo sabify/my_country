@@ -484,12 +484,7 @@ macro_rules! field_tokens {
 }
 
 fn generate_impl_from_country(features: &Features) -> TokenStream {
-    let has_currency_feature = features
-        .iter()
-        .filter(|f| f.starts_with("currency"))
-        .enumerate()
-        .count()
-        > 0;
+    let has_currency_feature = features.iter().filter(|f| f.contains("currency")).count() > 0;
     let alpha2_related = if features.contains("alpha2") {
         let for_currency = if has_currency_feature {
             let iterator_feature = if features.contains("iterator") {
@@ -610,12 +605,7 @@ fn generate_impl_from_numeric_code(features: &Features, countries: &Countries) -
 }
 
 fn generate_parse_error(features: &Features) -> TokenStream {
-    let has_currency_feature = features
-        .iter()
-        .filter(|f| f.starts_with("currency"))
-        .enumerate()
-        .count()
-        > 0;
+    let has_currency_feature = features.iter().filter(|f| f.contains("currency")).count() > 0;
     if !features.contains("alpha2")
         && !features.contains("alpha3")
         && !features.contains("numeric_code")
@@ -747,13 +737,7 @@ fn generate_impl_from_currency_numeric_code(
 }
 
 fn generate_impl_from_currency_str(features: &Features, currencies: &Currencies) -> TokenStream {
-    if features
-        .iter()
-        .filter(|f| f.starts_with("currency"))
-        .enumerate()
-        .count()
-        == 0
-    {
+    if features.iter().filter(|f| f.contains("currency")).count() == 0 {
         return quote! {};
     }
     let from_str_arms: TokenStream = currencies
@@ -1048,7 +1032,12 @@ fn generate_method_subdivision(
     subdivisions: &Subdivisions,
     doc: &str,
 ) -> TokenStream {
-    if !features.contains("subdivision") {
+    if features
+        .iter()
+        .filter(|f| f.contains("subdivision"))
+        .count()
+        == 0
+    {
         return quote! {};
     }
     let (statics, arms): (Vec<TokenStream>, Vec<TokenStream>) = subdivisions
@@ -1212,8 +1201,7 @@ fn generate_translation(features: &Features) -> TokenStream {
 fn generate_subdivision(features: &Features) -> TokenStream {
     if features
         .iter()
-        .filter(|f| f.starts_with("subdivision_"))
-        .enumerate()
+        .filter(|f| f.contains("subdivision"))
         .count()
         == 0
     {
@@ -1264,7 +1252,7 @@ fn generate_subdivision(features: &Features) -> TokenStream {
 }
 
 fn generate_geo(features: &Features) -> TokenStream {
-    if !features.contains("geo") {
+    if features.iter().filter(|f| f.contains("geo")).count() == 0 {
         return quote! {};
     }
 
@@ -1354,7 +1342,7 @@ fn generate_geo(features: &Features) -> TokenStream {
 }
 
 fn generate_vat_rates(features: &Features) -> TokenStream {
-    if !features.contains("vat_rates") {
+    if features.iter().filter(|f| f.contains("vat_rates")).count() == 0 {
         return quote! {};
     }
 
@@ -1867,13 +1855,7 @@ fn main() {
         .map(|f| f.to_uppercase())
         .collect();
 
-    let currencies: Currencies = if features
-        .iter()
-        .filter(|f| f.starts_with("currency_"))
-        .enumerate()
-        .count()
-        > 0
-    {
+    let currencies: Currencies = if features.iter().filter(|f| f.contains("currency")).count() > 0 {
         let currencies: HashMap<String, Currency> = csv::Reader::from_path(currency_data_path_buf)
             .expect("Valid currency data path")
             .deserialize()
