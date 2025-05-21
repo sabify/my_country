@@ -1,5 +1,5 @@
 // benches/bench_main.rs
-use criterion::{Criterion, criterion_group, criterion_main};
+use criterion::{criterion_group, criterion_main};
 
 mod parsing;
 

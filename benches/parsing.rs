@@ -1,6 +1,6 @@
-use criterion::{Criterion, black_box};
+use criterion::Criterion;
 use my_country::{Country, Currency};
-use std::str::FromStr;
+use std::{hint::black_box, str::FromStr};
 
 pub fn benchmark_parsing(c: &mut Criterion) {
     let mut group = c.benchmark_group("Parsing");

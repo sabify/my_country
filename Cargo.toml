@@ -17,18 +17,18 @@ thiserror = "2.0.12"
 
 [dev-dependencies]
 serde_json = "1.0.140"
-criterion = "0.5.1"
+criterion = "0.6.0"
 
 [build-dependencies]
-proc-macro2 = { version = "1.0.94", features = ["span-locations"] }
+proc-macro2 = { version = "1.0.95", features = ["span-locations"] }
 quote = "1.0.40"
 serde_yaml = "0.9.34"
-serde = { version = "1.0", features = ["derive"] }
+serde = { version = "1.0.219", features = ["derive"] }
 walkdir = "2.5.0"
-anyhow = "1.0.97"
+anyhow = "1.0.98"
 csv = "1.3.1"
-prettyplease = "0.2.31"
-syn = "2.0.100"
+prettyplease = "0.2.32"
+syn = "2.0.101"
 colored = "3.0.0"
 
 [package.metadata.docs.rs]
