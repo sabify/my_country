@@ -1928,7 +1928,16 @@ fn main() {
                     // extending the countries data
                     'outer: for (_, cy) in countries.iter_mut() {
                         for (_, cy) in cy.iter_mut() {
-                            if cy.iso_short_name.to_uppercase() == c.entity {
+                            if cy.iso_short_name.to_uppercase() == c.entity
+                                // Turkey unicode is not convertable, so we match manually
+                                || (cy.iso_short_name == "Türkiye" && c.entity == "TÜRKİYE")
+                            {
+                                // The USA has two currencies, we pick the USD
+                                if cy.iso_short_name == "United States of America (the)"
+                                    && c.alphabetic_code == "USN"
+                                {
+                                    continue;
+                                }
                                 cy.currency_code = c.alphabetic_code.clone();
                                 available_currencies.insert(c.alphabetic_code.clone());
                                 break 'outer;
