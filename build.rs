@@ -188,7 +188,7 @@ fn make_safe_ident<T: Display>(name: T) -> Ident {
         Ok(ident) => ident,
         Err(_) => {
             // If parsing fails (likely because it's a keyword), use raw identifier
-            let raw_name = format!("r#{}", name);
+            let raw_name = format!("r#{name}");
             syn::parse_str::<Ident>(&raw_name).unwrap_or_else(|_| {
                 // Fall back to creating a new identifier if all else fails
                 Ident::new(&raw_name, Span::call_site())
@@ -587,10 +587,10 @@ fn generate_impl_from_numeric_code(features: &Features, countries: &Countries) -
         return quote! {};
     }
     let from_numeric_code_arms: TokenStream = countries
-        .iter()
-        .map(|(_, h)| {
-            h.iter()
-                .map(|(_, country)| {
+        .values()
+        .map(|h| {
+            h.values()
+                .map(|country| {
                     let variant = make_safe_ident(&country.alpha2);
                     let numeric_code = &country.numeric_code;
 
@@ -643,10 +643,10 @@ fn generate_impl_from_str(features: &Features, countries: &Countries) -> TokenSt
         return quote! {};
     }
     let from_str_arms: TokenStream = countries
-        .iter()
-        .map(|(_, h)| {
-            h.iter()
-                .map(|(_, country)| {
+        .values()
+        .map(|h| {
+            h.values()
+                .map(|country| {
                     let variant = make_safe_ident(&country.alpha2);
                     let alpha2 = &country.alpha2;
 
@@ -678,10 +678,10 @@ fn generate_impl_from_str_alpha3(features: &Features, countries: &Countries) -> 
         return quote! {};
     }
     let from_str_arms: TokenStream = countries
-        .iter()
-        .map(|(_, h)| {
-            h.iter()
-                .map(|(_, country)| {
+        .values()
+        .map(|h| {
+            h.values()
+                .map(|country| {
                     let variant = make_safe_ident(&country.alpha2);
                     let alpha3 = &country.alpha3;
 
@@ -812,10 +812,10 @@ where
 
 fn generate_country(countries: &Countries) -> TokenStream {
     let variants: TokenStream = countries
-        .iter()
-        .map(|(_, h)| {
-            h.iter()
-                .map(|(_, country)| {
+        .values()
+        .map(|h| {
+            h.values()
+                .map(|country| {
                     let country_name = country.iso_long_name.as_str();
                     let variant = make_safe_ident(&country.alpha2);
 
@@ -1055,11 +1055,7 @@ fn generate_subdivision_type(
     }
     let types: Vec<_> = subdivisions
         .iter()
-        .flat_map(|(_, s)| {
-            s.iter()
-                .map(|(_, s)| s.r#type.clone())
-                .collect::<HashSet<_>>()
-        })
+        .flat_map(|(_, s)| s.values().map(|s| s.r#type.clone()).collect::<HashSet<_>>())
         .collect::<HashSet<_>>()
         .iter()
         .map(|t| {
@@ -1104,8 +1100,8 @@ fn generate_method_subdivision(
                 return (quote! {}, quote! {});
             }
             let subdivisions = subdivisions
-                .iter()
-                .map(|(_, subdivision)| {
+                .values()
+                .map(|subdivision| {
                     let name = field_tokens!(features, subdivision, name);
                     let code = field_tokens!(features, subdivision, code);
                     let translations = field_tokens!(
@@ -1306,12 +1302,8 @@ fn generate_subdivision(features: &Features) -> TokenStream {
 
     filter_struct_fields(input, |field| {
         let ident = field.ident.clone().unwrap().to_string();
-        let cleaned_ident = if ident.starts_with("r#") {
-            &ident[2..]
-        } else {
-            &ident
-        };
-        features.contains(&format!("subdivision_{}", cleaned_ident))
+        let cleaned_ident = ident.strip_prefix("r#").unwrap_or(&ident);
+        features.contains(&format!("subdivision_{cleaned_ident}"))
     })
 }
 
@@ -1982,7 +1974,7 @@ fn main() {
         1024 * 1024,
         File::create(out_path).expect("Couldn't create the output file"),
     );
-    write!(file, "{}", content).expect("Couldn't write to output file");
+    write!(file, "{content}").expect("Couldn't write to output file");
 }
 
 fn render_location(err: &syn::Error, code: &str) {
@@ -2027,7 +2019,7 @@ fn render_location(err: &syn::Error, code: &str) {
     );
 }
 fn render_fallback(err: &syn::Error) {
-    panic!("Unable to parse file: {}", err);
+    panic!("Unable to parse file: {err}");
 }
 
 fn country_code_to_emoji_flag(alpha2: &str) -> String {
