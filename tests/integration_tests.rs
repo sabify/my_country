@@ -123,7 +123,10 @@ mod country_name_tests {
     #[cfg(feature = "iso_short_name")]
     #[test]
     fn test_iso_short_name() {
-        assert_eq!(Country::US.iso_short_name(), "United States of America");
+        assert_eq!(
+            Country::US.iso_short_name(),
+            "United States of America (the)"
+        );
     }
 
     #[cfg(feature = "iso_long_name")]
