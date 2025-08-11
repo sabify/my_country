@@ -15,7 +15,7 @@ jobs:
       CURRENCIES_URL: "https://datahub.io/core/currency-codes/_r/-/data/codes-all.csv"
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Download and replace currencies.csv file
         run: |
           set -xe
@@ -48,7 +48,7 @@ jobs:
       COUNTRIES_DATA_PATH: "lib/countries/data"
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Check new changes in data path
         id: git-check
         run: |
