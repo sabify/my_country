@@ -37,6 +37,9 @@ struct Country {
     ioc: Option<String>,
     iso_long_name: String,
     iso_short_name: String,
+    // TODO: this is only for making countries data compatible with iso
+    // this may be removed later
+    iso_short_name_lower_case: Option<String>,
     languages_official: Option<Vec<String>>,
     languages_spoken: Option<Vec<String>>,
     national_destination_code_lengths: Option<Vec<i32>>,
@@ -1870,6 +1873,11 @@ fn main() {
     for (_, c) in countries.iter_mut() {
         for (_, c) in c.iter_mut() {
             c.emoji_flag = Some(country_code_to_emoji_flag(&c.alpha2));
+            // TODO: this is only for making countries data compatible with iso
+            // this may be removed later
+            if let Some(name) = &c.iso_short_name_lower_case {
+                c.iso_short_name = name.clone();
+            }
         }
     }
 
