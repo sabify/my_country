@@ -27,7 +27,7 @@ jobs:
           git diff --exit-code --quiet $CURRENCIES_PATH || echo "changes=true" >> $GITHUB_OUTPUT
       - name: Create Pull Request
         if: steps.git-check.outputs.changes == 'true'
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "chore: update currencies data [automated]"
@@ -76,7 +76,7 @@ jobs:
           fi
       - name: Create Pull Request
         if: steps.git-check.outputs.changes == 'true'
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           commit-message: "chore: update countries submodule [automated]"
           title: "Update countries submodule"
