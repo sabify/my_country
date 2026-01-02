@@ -40,7 +40,7 @@ Add `my_country` to your `Cargo.toml` with the specific features you need:
 
 ```toml
 [dependencies]
-my_country = { version = "0.1.12", default-features = false, features = ["us", "alpha2", "iso_short_name", "currency_code"] }
+my_country = { version = "0.1.13", default-features = false, features = ["us", "alpha2", "iso_short_name", "currency_code"] }
 ```
 
 ## Feature-Based Optimization
@@ -76,7 +76,7 @@ let alpha3 = country.alpha3();
 println!("Alpha-3 code: {}", alpha3);
 
 // Code generation with feature flags
-// my_country = { version = "0.1.12", default-features = false, features = ["us", "name", "currency_code", "alpha3"] }
+// my_country = { version = "0.1.13", default-features = false, features = ["us", "name", "currency_code", "alpha3"] }
 ```
 
 ### Checking Country Properties
@@ -100,7 +100,7 @@ println!("Country code for the US: +{}", us.country_code());
 println!("Phone number lengths in the US: {:?}", us.national_number_lengths());
 
 // Code generation with feature flags
-// my_country = { version = "0.1.12", default-features = false, features = ["us", "region", "g7_member", "country_code", "national_number_lengths"] }
+// my_country = { version = "0.1.13", default-features = false, features = ["us", "region", "g7_member", "country_code", "national_number_lengths"] }
 ```
 
 ### Working with Currencies
@@ -124,7 +124,7 @@ let currency: Currency = us.into();
 println!("Currency for US: {}", currency.name());
 
 // Code generation with feature flags
-// my_country = { version = "0.1.12", default-features = false, features = ["us", "currency_name", "currency_numeric_code", "currency_minor_unit", "currency_code"] }
+// my_country = { version = "0.1.13", default-features = false, features = ["us", "currency_name", "currency_numeric_code", "currency_minor_unit", "currency_code"] }
 ```
 
 ### Handling Subdivisions
@@ -154,7 +154,7 @@ for subdivision in us.subdivision() {
 }
 
 // Code generation with feature flags
-// my_country = { version = "0.1.12", default-features = false, features = ["us", "subdivision_name", "locale_en", "subdivision_geo"] }
+// my_country = { version = "0.1.13", default-features = false, features = ["us", "subdivision_name", "locale_en", "subdivision_geo"] }
 ```
 
 ## Country Data
@@ -198,7 +198,7 @@ if country.postal_code() {
 println!("Flag: {}", country.emoji_flag());
 
 // Code generation with feature flags
-// my_country = { version = "0.1.12", default-features = false, features = ["us", "alpha2", "alpha3", "numeric_code", "iso_short_name", "iso_long_name", "continent", "region", "subregion", "geo", "country_code", "international_prefix", "postal_code_format", "emoji_flag"] }
+// my_country = { version = "0.1.13", default-features = false, features = ["us", "alpha2", "alpha3", "numeric_code", "iso_short_name", "iso_long_name", "continent", "region", "subregion", "geo", "country_code", "international_prefix", "postal_code_format", "emoji_flag"] }
 ```
 
 ## Currency Data
@@ -224,7 +224,7 @@ let numeric_currency = Currency::try_from(840u16).unwrap();
 assert_eq!(numeric_currency, Currency::USD);
 
 // Code generation with feature flags
-// my_country = { version = "0.1.12", default-features = false, features = ["currency_code_usd", "currency_numeric_code", "currency_minor_unit"] }
+// my_country = { version = "0.1.13", default-features = false, features = ["currency_code_usd", "currency_numeric_code", "currency_minor_unit"] }
 ```
 
 ## Subdivision Data
@@ -258,7 +258,7 @@ for subdivision in subdivisions {
 }
 
 // Code generation with feature flags
-// my_country = { version = "0.1.12", default-features = false, features = ["us", subdivision_name", "subdivision_code", "subdivision_geo", "subdivision_comments", "locale_fa"] }
+// my_country = { version = "0.1.13", default-features = false, features = ["us", subdivision_name", "subdivision_code", "subdivision_geo", "subdivision_comments", "locale_fa"] }
 ```
 
 ## Localization
@@ -276,7 +276,7 @@ println!("English name: {:?}", translation.en);
 println!("Persian name: {:?}", translation.fa);
 
 // Enable additional locales with feature flags
-// my_country = { version = "0.1.12", default-features = false, features = ["locale_fa", "locale_es"] }
+// my_country = { version = "0.1.13", default-features = false, features = ["locale_fa", "locale_es"] }
 ```
 
 ## Serialization
@@ -407,7 +407,7 @@ Instead of including all country information, selectively enable just what you u
 
 ```toml
 [dependencies]
-my_country = { version = "0.1.12", default-features = false, features = ["us", "alpha2", "currency_code", "iso_short_name"] }
+my_country = { version = "0.1.13", default-features = false, features = ["us", "alpha2", "currency_code", "iso_short_name"] }
 ```
 
 This creates only the necessary methods, reducing the amount of code the Rust compiler needs to process.
@@ -418,7 +418,7 @@ For applications targeting specific regions, you can enable only relevant countr
 
 ```toml
 [dependencies]
-my_country = { version = "0.1.12", default-features = false, features = ["us", "ca", "mx"] }
+my_country = { version = "0.1.13", default-features = false, features = ["us", "ca", "mx"] }
 ```
 
 This approach is particularly effective for:
