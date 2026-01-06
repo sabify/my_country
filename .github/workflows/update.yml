@@ -12,15 +12,27 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CURRENCIES_PATH: "data/currencies.csv"
-      CURRENCIES_URL: "https://datahub.io/core/currency-codes/_r/-/data/codes-all.csv"
+      CURRENCIES_URL: "https://github.com/datasets/currency-codes"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
       - name: Download and replace currencies.csv file
         run: |
           set -xe
-          curl -L -o $CURRENCIES_PATH "$CURRENCIES_URL"
-          echo "CSV file downloaded and replaced"
+
+          DIR="$(pwd)"
+
+          sudo apt-get update
+          sudo apt-get install -y libxml2-utils recode
+
+          git clone "$CURRENCIES_URL" /tmp
+          cd /tmp/currency-codes/scripts
+          ./runall.sh
+          cp "../data/codes-all.csv" "$DIR/$CURRENCIES_PATH"
+
+          cd "$DIR"
+
+          echo "CSV file replaced"
       - name: Check for changes
         id: git-check
         run: |
