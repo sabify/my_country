@@ -11,20 +11,18 @@ Comprehensive information about every country, with support for ISO standards:
 - ISO 3166-2 (country subdivisions)
 - ISO 4217 (currency codes)
 - E.164 (international phone numbers)
-
-## Features
-
-`my_country` provides a unique feature-based code generation approach that allows you to:
-
-- Only include the data you need for code generation
-- Dramatically reduce compile times, binary size and LSP (rust-analyzer) wait times
+- Postal code formats and validation rules
+- Geographic coordinates and regional classifications
+- Address formatting standards
+- Official and spoken languages
+- International organization memberships (UN, EU, EEA, G7, G20, etc.)
+- Localization support for multiple languages
+- (See complete feature set below or in `Cargo.toml`)
 
 > ⭐ **Found this useful?** Give it a star ⭐ to show your support and help others discover it!
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Feature-Based Optimization](#feature-based-optimization)
 - [Usage Examples](#usage-examples)
 - [Country Data](#country-data)
 - [Currency Data](#currency-data)
@@ -32,11 +30,10 @@ Comprehensive information about every country, with support for ISO standards:
 - [Localization](#localization)
 - [Serialization](#serialization)
 - [Available Features](#available-features)
-- [Compile Time Optimization](#compile-time-optimization)
 - [Contributing](#contributing)
 - [License](#license)
 
-## Installation
+## Usage Examples
 
 Add `my_country` to your `Cargo.toml` with the specific features you need:
 
@@ -44,24 +41,6 @@ Add `my_country` to your `Cargo.toml` with the specific features you need:
 [dependencies]
 my_country = { version = "0.1.15", default-features = false, features = ["us", "alpha2", "iso_short_name", "currency_code"] }
 ```
-
-## Feature-Based Optimization
-
-Unlike traditional crates that provide all country data at once, `my_country` uses Rust's feature flags system to generate only the code you need. This approach offers several benefits:
-
-### 1. Compiler Performance
-
-By only generating code for the country properties you actually use, `my_country` can significantly improve compile times. For large projects, this can be the difference between waiting seconds versus minutes for compilation.
-
-### 2. Binary Size Optimization
-
-When building for deployment, especially on embedded systems or WebAssembly, every byte counts. The feature-based design ensures your final binary only includes the exact country data needed.
-
-### 3. Customizable Data Selection
-
-Need only currency information for European countries? Or just postal codes for North America? Simply enable the specific features to include only what your application requires.
-
-## Usage Examples
 
 ### Basic Example
 
@@ -398,37 +377,6 @@ Enable only specific countries to minimize compile time and binary size:
 - `es`: Spain
 - `br`: Brazil
 - ... (and all other countries by ISO alpha-2 code)
-
-## Compile Time Optimization
-
-The feature-based approach significantly improves compile times by only generating the code you need:
-
-### Selecting Only Methods You Need
-
-Instead of including all country information, selectively enable just what you use:
-
-```toml
-[dependencies]
-my_country = { version = "0.1.15", default-features = false, features = ["us", "alpha2", "currency_code", "iso_short_name"] }
-```
-
-This creates only the necessary methods, reducing the amount of code the Rust compiler needs to process.
-
-### Enabling Specific Countries
-
-For applications targeting specific regions, you can enable only relevant countries:
-
-```toml
-[dependencies]
-my_country = { version = "0.1.15", default-features = false, features = ["us", "ca", "mx"] }
-```
-
-This approach is particularly effective for:
-
-1. **Embedded systems**: Minimize binary size for constrained environments
-2. **WebAssembly**: Reduce download size for web applications
-3. **Development workflow**: Speed up compile-test cycles during development
-4. **Large applications**: Reduce incremental compilation times in complex projects
 
 ## Contributing
 
