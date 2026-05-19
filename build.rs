@@ -1056,7 +1056,9 @@ fn generate_subdivision_type(
     {
         return quote! {};
     }
-    let types: Vec<_> = subdivisions.values().flat_map(|s| s.values().map(|s| s.r#type.clone()).collect::<HashSet<_>>())
+    let types: Vec<_> = subdivisions
+        .values()
+        .flat_map(|s| s.values().map(|s| s.r#type.clone()).collect::<HashSet<_>>())
         .collect::<HashSet<_>>()
         .iter()
         .map(|t| {
