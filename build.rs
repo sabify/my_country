@@ -1056,9 +1056,7 @@ fn generate_subdivision_type(
     {
         return quote! {};
     }
-    let types: Vec<_> = subdivisions
-        .iter()
-        .flat_map(|(_, s)| s.values().map(|s| s.r#type.clone()).collect::<HashSet<_>>())
+    let types: Vec<_> = subdivisions.values().flat_map(|s| s.values().map(|s| s.r#type.clone()).collect::<HashSet<_>>())
         .collect::<HashSet<_>>()
         .iter()
         .map(|t| {
@@ -1138,7 +1136,7 @@ fn generate_method_subdivision(
                 .collect::<Vec<_>>();
 
             let country_subdivision =
-                make_safe_ident(format!("{}_SUBDIVISIONS", &country.to_uppercase()));
+                make_safe_ident(format!("{}_SUBDIVISIONS", country.to_uppercase()));
             let country = make_safe_ident(country.to_uppercase());
             let count = subdivisions.len();
 
@@ -1870,8 +1868,8 @@ fn main() {
     countries.retain(|c, _| features.contains(c));
 
     // extending the countries data
-    for (_, c) in countries.iter_mut() {
-        for (_, c) in c.iter_mut() {
+    for c in countries.values_mut() {
+        for c in c.values_mut() {
             c.emoji_flag = Some(country_code_to_emoji_flag(&c.alpha2));
             // TODO: this is only for making countries data compatible with iso
             // this may be removed later
@@ -1934,8 +1932,8 @@ fn main() {
                     && c.numeric_code != 0
                 {
                     // extending the countries data
-                    'outer: for (_, cy) in countries.iter_mut() {
-                        for (_, cy) in cy.iter_mut() {
+                    'outer: for cy in countries.values_mut() {
+                        for cy in cy.values_mut() {
                             if cy.iso_short_name.to_uppercase() == c.entity
                                 // Turkey unicode is not convertable, so we match manually
                                 || (cy.iso_short_name == "Türkiye" && c.entity == "TÜRKİYE")
