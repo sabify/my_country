@@ -27,8 +27,8 @@ serde = { version = "1.0", features = ["derive"] }
 walkdir = "2.5"
 anyhow = "1.0"
 csv = "1.4"
-prettyplease = "0.2"
-syn = "2.0"
+prettyplease = "0.3"
+syn = "3.0"
 colored = "3.1"
 heck = "0.5"
 
