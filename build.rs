@@ -1060,7 +1060,11 @@ fn generate_subdivision_type(
     }
     let types: Vec<_> = subdivisions
         .values()
-        .flat_map(|s| s.values().map(|s| s.r#type.clone()).collect::<BTreeSet<_>>())
+        .flat_map(|s| {
+            s.values()
+                .map(|s| s.r#type.clone())
+                .collect::<BTreeSet<_>>()
+        })
         .collect::<BTreeSet<_>>()
         .iter()
         .map(|t| {
@@ -1911,12 +1915,15 @@ fn main() {
                 .into_iter()
                 .map(move |(country, translation)| (country, locale.clone(), translation))
         })
-        .fold(BTreeMap::new(), |mut acc, (country, locale, translation)| {
-            acc.entry(country.clone())
-                .or_default()
-                .insert(locale.clone(), translation.clone());
-            acc
-        });
+        .fold(
+            BTreeMap::new(),
+            |mut acc, (country, locale, translation)| {
+                acc.entry(country.clone())
+                    .or_default()
+                    .insert(locale.clone(), translation.clone());
+                acc
+            },
+        );
 
     let mut available_currencies: HashSet<String> = features
         .iter()
