@@ -4,7 +4,7 @@ use proc_macro2::{Ident, Span, TokenStream};
 use quote::{ToTokens, quote};
 use serde::{Deserialize, Deserializer, de::DeserializeOwned};
 use std::{
-    collections::{HashMap, HashSet},
+    collections::{BTreeMap, BTreeSet, HashMap, HashSet},
     env,
     ffi::OsStr,
     fmt::Display,
@@ -16,10 +16,12 @@ use std::{
 use syn::{Field, Fields, FieldsNamed, ItemStruct, parse_quote};
 use walkdir::WalkDir;
 
-type Features = HashSet<String>;
-type Countries = HashMap<String, HashMap<String, Country>>;
-type Subdivisions = HashMap<String, HashMap<String, Subdivision>>;
-type Translations = HashMap<String, HashMap<String, String>>;
+// Ordered collections: every map iterated while emitting code must keep a
+// stable order, or the generated file changes on each build.
+type Features = BTreeSet<String>;
+type Countries = BTreeMap<String, BTreeMap<String, Country>>;
+type Subdivisions = BTreeMap<String, BTreeMap<String, Subdivision>>;
+type Translations = BTreeMap<String, BTreeMap<String, String>>;
 type Currencies = Vec<Currency>;
 
 #[derive(Deserialize)]
@@ -200,7 +202,7 @@ fn make_safe_ident<T: Display>(name: T) -> Ident {
     }
 }
 
-fn load_yaml_files<T>(dir_path: impl AsRef<Path>, recursive: bool) -> Result<HashMap<String, T>>
+fn load_yaml_files<T>(dir_path: impl AsRef<Path>, recursive: bool) -> Result<BTreeMap<String, T>>
 where
     T: DeserializeOwned,
 {
@@ -211,7 +213,7 @@ fn load_yaml_files_with_modifier<T, F>(
     dir_path: impl AsRef<Path>,
     recursive: bool,
     key_modifier: F,
-) -> Result<HashMap<String, T>>
+) -> Result<BTreeMap<String, T>>
 where
     F: Fn(String) -> String,
     T: DeserializeOwned,
@@ -223,7 +225,7 @@ where
         anyhow::bail!("Not a directory: {}", dir_path.display());
     }
 
-    let mut results = HashMap::new();
+    let mut results = BTreeMap::new();
 
     // Use WalkDir to iterate through directory contents
     let walker = if recursive {
@@ -1058,8 +1060,12 @@ fn generate_subdivision_type(
     }
     let types: Vec<_> = subdivisions
         .values()
-        .flat_map(|s| s.values().map(|s| s.r#type.clone()).collect::<HashSet<_>>())
-        .collect::<HashSet<_>>()
+        .flat_map(|s| {
+            s.values()
+                .map(|s| s.r#type.clone())
+                .collect::<BTreeSet<_>>()
+        })
+        .collect::<BTreeSet<_>>()
         .iter()
         .map(|t| {
             let t = make_safe_ident(t.to_upper_camel_case());
@@ -1909,12 +1915,15 @@ fn main() {
                 .into_iter()
                 .map(move |(country, translation)| (country, locale.clone(), translation))
         })
-        .fold(HashMap::new(), |mut acc, (country, locale, translation)| {
-            acc.entry(country.clone())
-                .or_default()
-                .insert(locale.clone(), translation.clone());
-            acc
-        });
+        .fold(
+            BTreeMap::new(),
+            |mut acc, (country, locale, translation)| {
+                acc.entry(country.clone())
+                    .or_default()
+                    .insert(locale.clone(), translation.clone());
+                acc
+            },
+        );
 
     let mut available_currencies: HashSet<String> = features
         .iter()
@@ -1923,7 +1932,7 @@ fn main() {
         .collect();
 
     let currencies: Currencies = if features.iter().filter(|f| f.contains("currency")).count() > 0 {
-        let currencies: HashMap<String, Currency> = csv::Reader::from_path(currency_data_path_buf)
+        let currencies: BTreeMap<String, Currency> = csv::Reader::from_path(currency_data_path_buf)
             .expect("Valid currency data path")
             .deserialize()
             .filter_map(|c| {
